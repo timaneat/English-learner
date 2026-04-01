@@ -1,0 +1,182 @@
+[
+  {
+    "model": "cards.word",
+    "pk": 1,
+    "fields": {
+      "en": "Hello",
+      "ru": "Привет",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 2,
+    "fields": {
+      "en": "Thank you",
+      "ru": "Спасибо",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 3,
+    "fields": {
+      "en": "Please",
+      "ru": "Пожалуйста",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 4,
+    "fields": {
+      "en": "Sorry",
+      "ru": "Извини",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 5,
+    "fields": {
+      "en": "Goodbye",
+      "ru": "До свидания",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 6,
+    "fields": {
+      "en": "Yes",
+      "ru": "Да",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 7,
+    "fields": {
+      "en": "No",
+      "ru": "Нет",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 8,
+    "fields": {
+      "en": "Water",
+      "ru": "Вода",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 9,
+    "fields": {
+      "en": "Food",
+      "ru": "Еда",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 10,
+    "fields": {
+      "en": "Friend",
+      "ru": "Друг",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 11,
+    "fields": {
+      "en": "Family",
+      "ru": "Семья",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 12,
+    "fields": {
+      "en": "House",
+      "ru": "Дом",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 13,
+    "fields": {
+      "en": "Work",
+      "ru": "Работа",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 14,
+    "fields": {
+      "en": "Sleep",
+      "ru": "Спать",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 15,
+    "fields": {
+      "en": "Love",
+      "ru": "Любовь",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 16,
+    "fields": {
+      "en": "Happy",
+      "ru": "Счастливый",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 17,
+    "fields": {
+      "en": "Beautiful",
+      "ru": "Красивый",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 18,
+    "fields": {
+      "en": "Strong",
+      "ru": "Сильный",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 19,
+    "fields": {
+      "en": "Fast",
+      "ru": "Быстрый",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  },
+  {
+    "model": "cards.word",
+    "pk": 20,
+    "fields": {
+      "en": "Slow",
+      "ru": "Медленный",
+      "created_at": "2026-04-01T20:00:00Z"
+    }
+  }
+]

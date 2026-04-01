@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My English Cards</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stats {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.05em;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn i {
+            font-size: 1.2em;
+        }
+        
+        .stats-box {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            margin-top: 10px;
+            opacity: 0.95;
+        }
+        
+        .words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .word-item {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+            border-left: 5px solid #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .word-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .word-item:hover::before {
+            left: 100%;
+        }
+        
+        .word-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            border-left-color: #764ba2;
+        }
+        
+        .word-text {
+            flex: 1;
+        }
+        
+        .word-en {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+        
+        .word-ru {
+            color: #666;
+            font-size: 1.05em;
+            font-weight: 500;
+        }
+        
+        .word-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+        
+        .no-words {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
+        .no-words p {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .no-words a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 2px solid #ffd700;
+            transition: all 0.3s ease;
+        }
+        
+        .no-words a:hover {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+        
+        .decorative-circle {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: white;
+            top: -100px;
+            right: -50px;
+            animation-delay: 0s;
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            background: white;
+            bottom: 50px;
+            left: 20px;
+            animation-delay: 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1>🗂️ Мои Карточки</h1>
+        </header>
+        
+        <div class="stats-box">
+            <div class="stat-number">{{ total_words }}</div>
+            <div class="stat-label">слов в словаре</div>
+        </div>
+        
+        <div class="controls">
+            {% if words %}
+                <a href="{% url 'cards:learn' %}" class="btn btn-success">
+                    <i class="fas fa-graduation-cap"></i>
+                    Начать обучение
+                </a>
+            {% endif %}
+            <a href="{% url 'cards:add_word' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Добавить слово
+            </a>
+        </div>
+        
+        {% if words %}
+            <div class="words-grid">
+                {% for word in words %}
+                    <div class="word-item">
+                        <div class="word-text">
+                            <div class="word-en">{{ word.en }}</div>
+                            <div class="word-ru">{{ word.ru }}</div>
+                        </div>
+                        <span class="word-badge">
+                            <i class="fas fa-bookmark"></i> Сохранено
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-words">
+                <p>📚 Ваш словарь пуст</p>
+                <p><a href="{% url 'cards:add_word' %}">Добавьте первое слово и начните учиться!</a></p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

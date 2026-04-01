@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn - My English Cards</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .progress {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 10px;
+            animation: fillProgress 0.6s ease-out;
+        }
+        
+        @keyframes fillProgress {
+            from { width: 0; }
+            to { width: 50%; }
+        }
+        
+        .card-wrapper {
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 35px;
+            padding: 60px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+        
+        .card:hover::before {
+            left: 100%;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card.flipped .card-content {
+            transform: scaleX(-1);
+        }
+        
+        .card-label {
+            font-size: 0.9em;
+            color: #999;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .card-text {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .card.flipped .card-text {
+            color: #667eea;
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .card-hint {
+            font-size: 0.95em;
+            color: #999;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.05em;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-speak {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-speak:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(245, 87, 108, 0.4);
+        }
+        
+        .btn-flip {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .btn-flip:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn i {
+            font-size: 1.2em;
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-nav {
+            padding: 12px 24px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+        
+        .btn-next {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-home {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(250, 112, 154, 0.4);
+        }
+        
+        .decorative-circle {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: white;
+            top: -100px;
+            right: -50px;
+            animation-delay: 0s;
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            background: white;
+            bottom: 50px;
+            left: 20px;
+            animation-delay: 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+        
+        @media (max-width: 600px) {
+            .card-text {
+                font-size: 2.5em;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📚 Обучение</h1>
+            <div class="progress">
+                <span id="word-count">Слово 1 из 1</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-wrapper">
+            <div class="card" id="card">
+                <div class="card-content">
+                    <div class="card-label" id="card-label">Переведи слово</div>
+                    <div class="card-text" id="card-text">{{ word.en }}</div>
+                    <div class="card-hint">Нажми на карточку чтобы перевернуть</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-speak" id="btn-speak">
+                <i class="fas fa-volume-up"></i>
+                <span id="speak-text">Произнести</span>
+            </button>
+            <button class="btn btn-flip" id="btn-flip">
+                <i class="fas fa-sync-alt"></i>
+                Перевернуть
+            </button>
+        </div>
+        
+        <div class="navigation">
+            <button class="btn-nav btn-next" id="btn-next">
+                <i class="fas fa-arrow-right"></i>
+                Следующее
+            </button>
+            <a href="{% url 'cards:home' %}" class="btn-nav btn-home">
+                <i class="fas fa-home"></i>
+                На главную
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // Переменные
+        const card = document.getElementById('card');
+        const cardText = document.getElementById('card-text');
+        const cardLabel = document.getElementById('card-label');
+        const btnFlip = document.getElementById('btn-flip');
+        const btnSpeak = document.getElementById('btn-speak');
+        const btnNext = document.getElementById('btn-next');
+        const wordCount = document.getElementById('word-count');
+        const progressFill = document.getElementById('progress-fill');
+        
+        let isFlipped = false;
+        let currentWord = {
+            en: '{{ word.en }}',
+            ru: '{{ word.ru }}',
+            id: {{ word.id }}
+        };
+        let isEnglish = Math.random() > 0.5; // Рандомно выбираем язык
+        
+        // Инициализация
+        function initCard() {
+            isFlipped = false;
+            card.classList.remove('flipped');
+            cardLabel.textContent = 'Переведи слово';
+            
+            if (isEnglish) {
+                cardText.textContent = currentWord.en;
+            } else {
+                cardText.textContent = currentWord.ru;
+            }
+        }
+        
+        // Переворот карточки
+        function flipCard() {
+            isFlipped = !isFlipped;
+            card.classList.toggle('flipped');
+            
+            if (isFlipped) {
+                const translation = isEnglish ? currentWord.ru : currentWord.en;
+                cardText.textContent = translation;
+                cardLabel.textContent = 'Ответ';
+            } else {
+                initCard();
+            }
+        }
+        
+        // Произношение слова
+        function speak() {
+            const textToSpeak = isFlipped ? (isEnglish ? currentWord.ru : currentWord.en) : (isEnglish ? currentWord.en : currentWord.ru);
+            const lang = (isEnglish && !isFlipped) || (!isEnglish && isFlipped) ? 'en-US' : 'ru-RU';
+            
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = lang;
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            // Добавляем визуальный эффект
+            btnSpeak.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                btnSpeak.style.transform = 'scale(1)';
+            }, 100);
+            
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        // Получить следующее слово
+        async function getNextWord() {
+            try {
+                const response = await fetch('{% url "cards:get_random_word" %}');
+                const data = await response.json();
+                currentWord = data;
+                isEnglish = Math.random() > 0.5;
+                initCard();
+                updateProgress();
+            } catch (error) {
+                console.error('Ошибка при получении слова:', error);
+            }
+        }
+        
+        // Обновить прогресс
+        function updateProgress() {
+            // Простой прогресс-бар, может быть улучшен
+            const rotation = Math.random();
+            progressFill.style.width = (30 + Math.random() * 40) + '%';
+        }
+        
+        // Event listeners
+        btnFlip.addEventListener('click', flipCard);
+        card.addEventListener('click', flipCard);
+        btnSpeak.addEventListener('click', speak);
+        btnNext.addEventListener('click', getNextWord);
+        
+        // Инициализация при загрузке
+        window.addEventListener('load', () => {
+            initCard();
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                flipCard();
+            } else if (e.code === 'ArrowRight') {
+                getNextWord();
+            } else if (e.code === 'KeyS') {
+                speak();
+            }
+        });
+    </script>
+</body>
+</html>
