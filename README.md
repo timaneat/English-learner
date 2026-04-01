@@ -65,7 +65,7 @@ heroku config:set DJANGO_SETTINGS_MODULE=english_learner.settings
 4. Railway автоматически определит Django проект
 5. Нажмите "Deploy" - готово!
 
-### Вариант 3: Render (Бесплатно - ПОДРОБНАЯ ИНСТРУКЦИЯ)
+### Вариант 3: Render (Бесплатно - УПРОЩЕННАЯ ИНСТРУКЦИЯ)
 
 #### 🎯 Почему Render?
 - **750 бесплатных часов** в месяц (примерно 31 день)
@@ -74,122 +74,101 @@ heroku config:set DJANGO_SETTINGS_MODULE=english_learner.settings
 - **Глобальная CDN** для быстрой загрузки
 - **Интеграция с GitHub** - автообновление при push
 
-#### 📋 Пошаговая инструкция:
+#### 📋 Быстрая инструкция (если стандартная не работает):
 
 ##### Шаг 1: Регистрация
-1. Перейдите на **[render.com](https://render.com)**
-2. Зарегистрируйтесь (можно через GitHub аккаунт)
-3. Подтвердите email
+**[render.com](https://render.com)** → Зарегистрироваться
 
-##### Шаг 2: Создание Web Service
-1. Нажмите **"New +"** → **"Web Service"**
-2. Выберите **"Connect GitHub"**
-3. Авторизуйте Render для доступа к репозиториям
-4. Найдите и выберите `timaneat/English-learner`
+##### Шаг 2: Создать Web Service
+"New +" → "Web Service" → "Connect GitHub" → Выбрать `timaneat/English-learner`
 
-##### Шаг 3: Настройка сервиса
-Заполните поля:
-
+##### Шаг 3: Настройки (УПРОЩЕННЫЕ)
 ```
-Name: english-cards (или любое имя)
+Name: english-cards
 Environment: Python 3
-Region: Frankfurt (EU Central) - ближе к России
-Branch: main (или ваша ветка)
-```
-
-##### Шаг 4: Настройка Build & Start
-```
-Build Command: ./build.sh
+Build Command: ./build_simple.sh
 Start Command: gunicorn english_learner.wsgi:application --bind 0.0.0.0:$PORT
 ```
 
-##### Шаг 5: Переменные окружения
-Нажмите **"Advanced"** и добавьте:
-
+##### Шаг 4: Переменные окружения
 ```
 DJANGO_SETTINGS_MODULE = english_learner.settings
 DEBUG = False
-SECRET_KEY = ваш-секретный-ключ (придумайте сложный)
+SECRET_KEY = django-insecure-any-random-string-here
 ```
 
-##### Шаг 6: Создание базы данных
-1. Нажмите **"New +"** → **"PostgreSQL"**
-2. Name: `english-cards-db`
-3. Database: `english_cards`
-4. Username: `english_cards_user`
-5. Нажмите **"Create Database"**
+##### Шаг 5: База данных
+"New +" → "PostgreSQL" → Создать → Скопировать DATABASE_URL
 
-##### Шаг 7: Подключение БД к приложению
-1. Перейдите в настройки вашего Web Service
-2. В разделе **"Environment"** добавьте:
-```
-DATABASE_URL = postgresql://[ваши-данные-из-PostgreSQL]
-```
-(Скопируйте DATABASE_URL из настроек PostgreSQL)
+##### Шаг 6: Развертывание
+"Create Web Service" → Ждать 5-10 минут → Готово!
 
-##### Шаг 8: Развертывание
-1. Нажмите **"Create Web Service"**
-2. Ждите 5-10 минут пока соберется и запустится
-3. Готово! Получите URL вида: `https://english-cards.onrender.com`
+#### 🚨 Если возникают ошибки:
+1. **Проверьте [TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - подробные решения
+2. **Используйте Railway** - проще чем Render
+3. **Попробуйте Streamlit Cloud** - самый простой вариант
 
-#### 🔧 Возможные проблемы и решения:
-
-##### Ошибка "ModuleNotFoundError"
-- Проверьте что все пакеты в `requirements.txt`
-- Убедитесь что `build.sh` исполняемый
-
-##### Ошибка базы данных
-- Проверьте `DATABASE_URL` в переменных окружения
-- Убедитесь что PostgreSQL создана и подключена
-
-##### Сайт не загружается
-- Проверьте логи в Render dashboard
-- Возможно нужно подождать 5-10 минут после создания
-
-##### Статические файлы не работают
-- WhiteNoise должен автоматически настроиться через `build.sh`
-
-#### 💰 Тарифы Render:
-- **Free**: 750 часов/месяц, 1GB RAM, 1GB disk
-- **Starter**: $7/месяц - для постоянного использования
-- **Pro**: От $25/месяц - для серьезных проектов
-
-#### ⚡ Преимущества Render:
-- ✅ Бесплатный тариф подходит для тестирования
-- ✅ PostgreSQL включена (не нужно платить отдельно)
-- ✅ Автоматические обновления при push в GitHub
-- ✅ SSL сертификаты
-- ✅ Хорошая производительность
-- ✅ Русскоязычная поддержка
-
-#### 🚨 Важные замечания:
-- **Free тариф "засыпает"** после 15 минут без активности
-- Первый запрос может быть медленным (15-30 сек)
-- Ограничение по трафику и ресурсам
-- Для продакшена лучше платный тариф
+#### 🔧 Альтернативные команды сборки:
+- **Простая:** `./build_simple.sh`
+- **Полная:** `./build.sh`
+- **Docker:** Используйте Dockerfile
 
 #### 🎯 Что делать после развертывания:
-1. Откройте URL и проверьте работу
-2. Добавьте несколько слов
-3. Протестируйте режим обучения
-4. Поделитесь ссылкой с друзьями!
+1. Открыть URL и проверить работу
+2. Добавить слова через интерфейс
+3. Протестировать режим обучения
+4. Поделиться ссылкой!
 
-**Готовы начать?** Перейдите на [render.com](https://render.com) и следуйте инструкциям выше! 🚀
+**❌ Возникают ошибки?** Сначала посмотрите [TROUBLESHOOTING.md](TROUBLESHOOTING.md)!
+
+**Готовы начать?** Перейдите на [render.com](https://render.com)! 🚀
 
 ## 📁 Структура проекта
 
 ```
 English-learner/
-├── streamlit_app.py              # Streamlit версия
+├── streamlit_app.py              # Streamlit версия приложения
 ├── requirements_streamlit.txt    # Зависимости для Streamlit
 ├── requirements.txt              # Зависимости для Django
 ├── .streamlit/config.toml        # Конфигурация Streamlit
 ├── cards/                        # Django приложение
-├── english_learner/              # Django настройки
-├── manage.py                    # Django менеджер
+│   ├── models.py                 # Модель Word
+│   ├── views.py                  # Представления (home, learn, add_word)
+│   ├── urls.py                   # Маршруты приложения
+│   ├── templates/cards/          # HTML шаблоны
+│   │   ├── home.html            # Главная страница
+│   │   ├── learn.html           # Страница обучения
+│   │   └── add_word.html        # Добавление слов
+│   └── static/cards/            # Статические файлы
+├── english_learner/              # Django настройки проекта
+│   ├── settings.py              # Основные настройки
+│   ├── urls.py                  # Главные маршруты
+│   └── wsgi.py                  # WSGI конфигурация
+├── manage.py                    # Django менеджер команд
+├── build.sh                     # Скрипт сборки для развертывания
+├── build_simple.sh              # Упрощенный скрипт сборки
+├── Dockerfile                   # Docker конфигурация
+├── render_settings.py           # Настройки для Render
+├── TROUBLESHOOTING.md           # Руководство по устранению ошибок
 ├── Procfile                     # Для Heroku
 ├── runtime.txt                  # Python версия для Heroku
 └── README.md                    # Этот файл
+```
+
+## 🖥️ Локальный запуск
+
+### Streamlit версия:
+```bash
+pip install -r requirements_streamlit.txt
+streamlit run streamlit_app.py
+```
+
+### Django версия:
+```bash
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py loaddata words
+python manage.py runserver
 ```
 
 ## 🎯 Функциональность
@@ -240,7 +219,32 @@ python manage.py runserver
 
 Приветствуются любые улучшения и предложения!
 
+### Как внести вклад:
+1. Fork репозиторий
+2. Создайте feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit изменения (`git commit -m 'Add some AmazingFeature'`)
+4. Push в branch (`git push origin feature/AmazingFeature`)
+5. Откройте Pull Request
+
+### Идеи для улучшений:
+- ✅ Добавление категорий слов (животные, еда, путешествия)
+- ✅ Система прогресса и статистики
+- ✅ Тесты на знание слов
+- ✅ Темная тема интерфейса
+- ✅ Экспорт/импорт словаря
+- ✅ Мобильное приложение
+
+## 📞 Контакты
+
+- **GitHub:** [timaneat](https://github.com/timaneat)
+- **Email:** [Ваш email]
+- **Telegram:** [Ваш Telegram]
+
+## 📄 Лицензия
+
+Этот проект распространяется под лицензией MIT. Подробности в файле `LICENSE`.
+
 ---
 
-**Автор:** timaneat
-**Дата:** 2026
+**🚀 Удачи в изучении английского!**  
+**Made with ❤️ by timaneat**
