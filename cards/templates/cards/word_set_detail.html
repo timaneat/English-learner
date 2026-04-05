@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ word_set.name }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .set-title {
+            font-size: 2.5em;
+            font-weight: 800;
+            flex: 1;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        
+        .set-title:hover {
+            opacity: 0.8;
+        }
+        
+        .set-title-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 2.5em;
+            font-weight: 800;
+            font-family: inherit;
+            outline: none;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        
+        .set-title-input:focus {
+            border-bottom-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+        }
+        
+        .add-word-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .add-word-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .add-word-form input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .add-word-form input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .add-word-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+        
+        .add-word-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .words-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .words-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .word-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .word-item:hover {
+            background: #e9ecef;
+        }
+        
+        .word-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .word-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .word-separator {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .start-btn {
+            margin-top: 30px;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .set-title, .set-title-input {
+                font-size: 2em;
+            }
+            
+            .add-word-form {
+                flex-direction: column;
+            }
+            
+            .word-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="set-title" id="set-title-display" title="Нажмите для редактирования названия">{{ word_set.name }}</h1>
+            <input type="text" class="set-title-input" id="set-title-input" value="{{ word_set.name }}" style="display: none;">
+            <a href="{% url 'cards:home' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                На главную
+            </a>
+        </div>
+        
+        <form method="post" id="main-form">
+            {% csrf_token %}
+            
+            <div class="add-word-section">
+                <div class="section-title">Добавить слово</div>
+                <div class="add-word-form">
+                    <input type="text" name="en" placeholder="Английское слово" required>
+                    <input type="text" name="ru" placeholder="Русский перевод" required>
+                    <button type="submit" name="add_word" class="add-word-btn">Добавить</button>
+                </div>
+            </div>
+            
+            <div class="words-section">
+                <div class="section-title">Слова в наборе</div>
+                
+                {% if words %}
+                <div class="words-list">
+                    {% for word in words %}
+                    <div class="word-item">
+                        <input type="text" name="en_{{ word.id }}" value="{{ word.en }}" class="word-input" required>
+                        <span class="word-separator">-</span>
+                        <input type="text" name="ru_{{ word.id }}" value="{{ word.ru }}" class="word-input" required>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">В этом наборе пока нет слов. Добавьте первое слово выше.</div>
+                {% endif %}
+                
+                <button type="submit" name="update_words" class="start-btn" {% if not can_start_learning %}disabled style="background: #95a5a6; cursor: not-allowed;"{% endif %}>
+                    <i class="fas fa-play"></i> 
+                    {% if can_start_learning %}
+                        Начать изучение
+                    {% else %}
+                        Нет слов для изучения
+                    {% endif %}
+                </button>
+            </div>
+            
+            <input type="hidden" name="set_name" id="set-name-hidden" value="{{ word_set.name }}">
+        </form>
+    </div>
+    
+    <script>
+        // Редактирование названия набора
+        const titleDisplay = document.getElementById('set-title-display');
+        const titleInput = document.getElementById('set-title-input');
+        const setNameHidden = document.getElementById('set-name-hidden');
+        
+        titleDisplay.addEventListener('click', function() {
+            titleDisplay.style.display = 'none';
+            titleInput.style.display = 'block';
+            titleInput.focus();
+            titleInput.select();
+        });
+        
+        titleInput.addEventListener('blur', function() {
+            titleDisplay.textContent = titleInput.value;
+            setNameHidden.value = titleInput.value;
+            titleDisplay.style.display = 'block';
+            titleInput.style.display = 'none';
+            
+            // Автоматически отправляем форму для сохранения
+            const formData = new FormData();
+            formData.append('set_name', titleInput.value);
+            formData.append('update_set_name', '1');
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+            
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData
+            });
+        });
+        
+        titleInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                titleInput.blur();
+            }
+        });
+    </script>
+</body>
+</html>
