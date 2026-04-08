@@ -70,18 +70,25 @@ def word_set_detail(request, set_id):
 def learn_set(request, set_id):
     """Learning mode for a specific word set"""
     word_set = get_object_or_404(WordSet, id=set_id)
-    words = list(word_set.words.filter(is_learned=False))
+    all_words = word_set.words.all()
+    words = list(all_words.filter(is_learned=False))
     
     if not words:
         return redirect('cards:word_set_detail', set_id=set_id)
     
     # Get random word
     current_word = random.choice(words)
+    learned_words = all_words.filter(is_learned=True).count()
+    total_words = all_words.count()
+    progress_percentage = int((learned_words / total_words) * 100) if total_words else 0
     
     context = {
         'word': current_word,
         'word_set': word_set,
-        'total_words': len(words),
+        'total_words': total_words,
+        'learned_words': learned_words,
+        'remaining_words': len(words),
+        'progress_percentage': progress_percentage,
         'show_translation': False,
     }
     return render(request, 'cards/learn.html', context)
@@ -135,18 +142,16 @@ def get_word(request, word_id):
 
 @require_http_methods(["POST"])
 def mark_word_learned(request, word_id):
-    """Mark a word as learned and delete it from learning queue"""
-    try:
-        word = get_object_or_404(Word, id=word_id)
-        word.is_learned = True
-        word.save()
-        
-        return JsonResponse({
-            'success': True,
-            'message': f'Слово "{word.en}" выучено!'
-        })
-    except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'error': str(e)
-        }, status=400)
+    """Mark a word as learned so it is skipped during learning."""
+    word = get_object_or_404(Word, id=word_id)
+    word.is_learned = True
+    word.save()
+
+    next_url = request.POST.get('next') or request.POST.get('return_url')
+    if next_url:
+        return redirect(next_url)
+
+    return JsonResponse({
+        'success': True,
+        'message': f'Слово "{word.en}" выучено!'
+    })

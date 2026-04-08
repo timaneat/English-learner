@@ -317,9 +317,9 @@
         <div class="header">
             <h1>📚 {{ word_set.name }}</h1>
             <div class="progress">
-                <span id="word-count">Слово 1 из 1</span>
+                <span id="word-count">Выучено: {{ learned_words }} из {{ total_words }}</span>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill"></div>
+                    <div class="progress-fill" id="progress-fill" style="width: {{ progress_percentage }}%;"></div>
                 </div>
             </div>
         </div>
@@ -335,33 +335,35 @@
         </div>
         
         <div class="controls">
-            <button class="btn btn-speak" id="btn-speak">
+            <button class="btn btn-speak" id="btn-speak" type="button">
                 <i class="fas fa-volume-up"></i>
                 <span id="speak-text">Произнести</span>
             </button>
-            <button class="btn btn-flip" id="btn-flip">
+            <button class="btn btn-flip" id="btn-flip" type="button">
                 <i class="fas fa-sync-alt"></i>
                 Перевернуть
             </button>
-            <button class="btn btn-learned" id="btn-learned">
-                <i class="fas fa-check-circle"></i>
-                Выучено
-            </button>
+            <form action="{% url 'cards:mark_word_learned' word.id %}" method="post" id="learned-form">
+                {% csrf_token %}
+                <input type="hidden" name="return_url" value="{% url 'cards:learn_set' word_set.id %}">
+                <button class="btn btn-learned" type="submit">
+                    <i class="fas fa-check-circle"></i>
+                    Выучено
+                </button>
+            </form>
         </div>
         
         <div class="navigation">
-            <button class="btn-nav btn-next" id="btn-next">
+            <a href="{% url 'cards:learn_set' word_set.id %}" class="btn-nav btn-next" id="btn-next">
                 <i class="fas fa-arrow-right"></i>
                 Следующее
-            </button>
+            </a>
             <a href="{% url 'cards:home' %}" class="btn-nav btn-home">
                 <i class="fas fa-home"></i>
                 На главную
             </a>
         </div>
     </div>
-    
-    {% csrf_token %}
     
     <script>
         // Переменные
@@ -370,22 +372,16 @@
         const cardLabel = document.getElementById('card-label');
         const btnFlip = document.getElementById('btn-flip');
         const btnSpeak = document.getElementById('btn-speak');
-        const btnNext = document.getElementById('btn-next');
-        const btnLearned = document.getElementById('btn-learned');
-        const wordCount = document.getElementById('word-count');
+        const learnedForm = document.getElementById('learned-form');
         const progressFill = document.getElementById('progress-fill');
         
         let isFlipped = false;
-        let currentWord = {
+        const currentWord = {
             en: '{{ word.en }}',
             ru: '{{ word.ru }}',
             id: {{ word.id }}
         };
         let isEnglish = Math.random() > 0.5; // Рандомно выбираем язык
-        
-        // Прогресс трекинг - один раз берем total, потом только увеличиваем learned
-        let totalWords = {{ total_words }};
-        let learnedWords = 0;
         
         // Инициализация
         function initCard() {
@@ -436,102 +432,19 @@
         
         // Получить следующее слово
         async function getNextWord() {
-            try {
-                const response = await fetch('{% url "cards:get_random_word_set" word_set.id %}');
-                if (!response.ok) {
-                    // Нет больше слов для изучения
-                    alert('🎉 Поздравляем! Вы выучили все слова в этом наборе!');
-                    window.location.href = '{% url "cards:word_set_detail" word_set.id %}';
-                    return;
-                }
-                const data = await response.json();
-                currentWord = data;
-                isEnglish = Math.random() > 0.5;
-                initCard();
-            } catch (error) {
-                console.error('Ошибка при получении слова:', error);
-            }
-        }
-        
-        // Пометить слово как выученное
-        async function markAsLearned() {
-            try {
-                const formData = new FormData();
-                formData.append('csrfmiddlewaretoken', getCookie('csrftoken'));
-                
-                const response = await fetch(`/cards/word/${currentWord.id}/learned/`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Ошибка при сохранении');
-                }
-                
-                const data = await response.json();
-                learnedWords++;
-                
-                // Показываем уведомление
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-                    color: white;
-                    padding: 15px 25px;
-                    border-radius: 10px;
-                    box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
-                    z-index: 1000;
-                    animation: slideInRight 0.4s ease-out;
-                    font-weight: 700;
-                `;
-                notification.textContent = `✓ ${data.message}`;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.animation = 'slideOutRight 0.4s ease-out';
-                    setTimeout(() => notification.remove(), 400);
-                }, 2000);
-                
-                // Переходим к следующему слову
-                await getNextWord();
-                updateProgress();
-            } catch (error) {
-                console.error('Ошибка:', error);
-                alert('Ошибка при отметке слова как выученного');
-            }
+            window.location.href = '{% url "cards:learn_set" word_set.id %}';
         }
         
         // Обновить прогресс
         function updateProgress() {
-            const percentage = (learnedWords / totalWords) * 100;
+            const percentage = {{ progress_percentage }};
             progressFill.style.width = percentage + '%';
-            wordCount.textContent = `Выучено: ${learnedWords} из ${totalWords}`;
-        }
-        
-        // Функция для получения CSRF токена
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
         }
         
         // Event listeners
         btnFlip.addEventListener('click', flipCard);
         card.addEventListener('click', flipCard);
         btnSpeak.addEventListener('click', speak);
-        btnNext.addEventListener('click', getNextWord);
-        btnLearned.addEventListener('click', markAsLearned);
         
         // Инициализация при загрузке
         window.addEventListener('load', () => {
@@ -549,7 +462,7 @@
             } else if (e.code === 'KeyS') {
                 speak();
             } else if (e.code === 'KeyL') {
-                markAsLearned();
+                learnedForm.submit();
             }
         });
         
